@@ -1,8 +1,7 @@
 package com.plantcare.plantcare;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -10,21 +9,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class PlantService {
+
+    private final UserPlantRepository repository = new UserPlantRepository();
+
         private static final int WATERING_INTERVAL_DAYS = 2;
 
 
-        private Map<Integer , LocalDate> lastWateredMap = new HashMap<>();
     
     public String waterPlant(int id)
     {
-        lastWateredMap.put(id,LocalDate.now());
+        repository.setWater(id,LocalDate.now());
          return "Plant with ID " + id + " has been watered!";
 
     }
 
     public LocalDate getLastWatered(int id)
     {
-        return lastWateredMap.get(id);
+        return repository.findLastWatered(id);
     }
 
 
@@ -48,7 +49,7 @@ public class PlantService {
 
         LocalDate today = LocalDate.now();
         
-        lastWateredMap.forEach((id, LastWateredDate)->{
+        repository.findAll().forEach((id, LastWateredDate)->{
             LocalDate nextWateringDate = LastWateredDate.plusDays(WATERING_INTERVAL_DAYS);
 
             if(!nextWateringDate.isAfter(today))

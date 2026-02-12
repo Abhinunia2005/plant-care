@@ -16,12 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
             this.plantService = plantService;
         }    
 
-    @GetMapping("/hello")  //maps HTTP GET requests to / endpoint
-    public String hello() {
-        return "Hello, PlantCare is alive!";
-        
-    }
-
     @GetMapping("/plants/{id}")
 
     public String getPlant(@PathVariable int id)
